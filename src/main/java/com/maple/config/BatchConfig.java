@@ -44,25 +44,25 @@ import org.springframework.transaction.PlatformTransactionManager;
 @RequiredArgsConstructor
 @Slf4j
 public class BatchConfig {
-    @Bean
-    public Job myJob(JobRepository jobRepository, Flow parallelFlow, JobExecutionListener jobExecutionListener) {
-        return new JobBuilder("myJob", jobRepository)
-                .listener(jobExecutionListener)
-                .start(parallelFlow)
-                .end()
-                .build();
-    }
-
 //    @Bean
-//    public Job myJob(JobRepository jobRepository, Step noticeStep, Step updateStep, Step eventStep, Step shopStep, JobExecutionListener jobExecutionListener) {
+//    public Job myJob(JobRepository jobRepository, Flow parallelFlow, JobExecutionListener jobExecutionListener) {
 //        return new JobBuilder("myJob", jobRepository)
 //                .listener(jobExecutionListener)
-//                .start(noticeStep)
-//                .next(updateStep)
-//                .next(eventStep)
-//                .next(shopStep)
+//                .start(parallelFlow)
+//                .end()
 //                .build();
 //    }
+
+    @Bean
+    public Job myJob(JobRepository jobRepository, Step noticeStep, Step updateStep, Step eventStep, Step shopStep, JobExecutionListener jobExecutionListener) {
+        return new JobBuilder("myJob", jobRepository)
+                .listener(jobExecutionListener)
+                .start(noticeStep)
+                .next(updateStep)
+                .next(eventStep)
+                .next(shopStep)
+                .build();
+    }
 
     @Bean
     public Step noticeStep(JobRepository jobRepository, NoticeTasklet noticeTasklet, PlatformTransactionManager transactionManager) {
